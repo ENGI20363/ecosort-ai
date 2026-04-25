@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Alert, StyleSheet } from 'react-native';
+import { SafeAreaView, Alert, StyleSheet, View } from 'react-native';
+import { useFonts, KumbhSans_400Regular, KumbhSans_600SemiBold, KumbhSans_700Bold, KumbhSans_800ExtraBold } from '@expo-google-fonts/kumbh-sans';
 import { CaptureView } from './src/components/CaptureView';
 import { PreviewView } from './src/components/PreviewView';
 import { ResultCard } from './src/components/ResultCard';
 import { StatsScreen } from './src/components/StatsScreen';
 import { classifyImage } from './src/api/classify';
 import { getItemImpact } from './src/lib/impact';
-import { saveScan, getImpactTotals } from './src/lib/history';
+import { saveScan } from './src/lib/history';
 import { Classification, ItemImpact } from './src/types';
 import { getSortedCount, incrementSortedCount } from './src/lib/storage';
 
 type Phase = 'capture' | 'preview' | 'result' | 'stats';
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    KumbhSans_400Regular,
+    KumbhSans_600SemiBold,
+    KumbhSans_700Bold,
+    KumbhSans_800ExtraBold,
+  });
+
   const [phase, setPhase] = useState<Phase>('capture');
   const [imageUri, setImageUri] = useState('');
   const [imageBase64, setImageBase64] = useState('');
@@ -24,6 +32,8 @@ export default function App() {
   useEffect(() => {
     getSortedCount().then(setSortedCount);
   }, []);
+
+  if (!fontsLoaded) return <View style={styles.loading} />;
 
   const handleImageSelected = (uri: string, base64: string) => {
     setImageUri(uri);
@@ -98,5 +108,6 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#F0FDF4' },
+  root: { flex: 1, backgroundColor: '#282A36' },
+  loading: { flex: 1, backgroundColor: '#282A36' },
 });
