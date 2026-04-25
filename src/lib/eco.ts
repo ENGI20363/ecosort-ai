@@ -5,7 +5,18 @@ export interface Classification {
   category: Category;
   confidence: number;
   tip: string;
+  why?: string;
 }
+
+export interface MultiClassification {
+  items: Classification[];
+}
+
+export const confidenceLabel = (n: number): string => {
+  if (n >= 85) return "High Confidence";
+  if (n >= 60) return "Medium Confidence";
+  return "Low Confidence";
+};
 
 export const CATEGORY_META: Record<Category, { label: string; emoji: string; bg: string; soft: string; fg: string; ring: string }> = {
   recycling: {

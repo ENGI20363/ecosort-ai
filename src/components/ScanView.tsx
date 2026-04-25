@@ -1,13 +1,14 @@
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Camera, Upload, X, Loader2 } from "lucide-react";
+import { Camera, Upload, X, Loader2, Layers, Scan } from "lucide-react";
 
 interface Props {
-  onAnalyze: (imageDataUrl: string) => void;
+  onAnalyze: (imageDataUrl: string, mode: "single" | "multi") => void;
   loading: boolean;
+  loadingMode: "single" | "multi" | null;
 }
 
-export const ScanView = ({ onAnalyze, loading }: Props) => {
+export const ScanView = ({ onAnalyze, loading, loadingMode }: Props) => {
   const [preview, setPreview] = useState<string | null>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -21,7 +22,7 @@ export const ScanView = ({ onAnalyze, loading }: Props) => {
 
   if (preview) {
     return (
-      <div className="w-full max-w-md mx-auto animate-fade-up space-y-5">
+      <div className="w-full max-w-md mx-auto animate-fade-up space-y-4">
         <div className="relative rounded-3xl overflow-hidden bg-muted shadow-card aspect-[4/3]">
           <img src={preview} alt="Preview" className="w-full h-full object-cover" />
           {!loading && (
@@ -36,18 +37,34 @@ export const ScanView = ({ onAnalyze, loading }: Props) => {
           {loading && (
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
               <Loader2 className="w-10 h-10 text-primary animate-spin" />
-              <p className="text-sm font-medium text-foreground">Analyzing...</p>
+              <p className="text-sm font-medium text-foreground">
+                {loadingMode === "multi" ? "Analyzing multiple items..." : "Analyzing your item..."}
+              </p>
             </div>
           )}
         </div>
-        <Button
-          onClick={() => onAnalyze(preview)}
-          disabled={loading}
-          size="lg"
-          className="w-full h-14 rounded-2xl text-base font-semibold shadow-glow bg-gradient-hero hover:opacity-95"
-        >
-          {loading ? "Analyzing..." : "Analyze Item"}
-        </Button>
+
+        <div className="space-y-2.5">
+          <Button
+            onClick={() => onAnalyze(preview, "single")}
+            disabled={loading}
+            size="lg"
+            className="w-full h-14 rounded-2xl text-base font-semibold shadow-glow bg-gradient-hero hover:opacity-95"
+          >
+            <Scan className="w-5 h-5 mr-2" />
+            Analyze Item
+          </Button>
+          <Button
+            onClick={() => onAnalyze(preview, "multi")}
+            disabled={loading}
+            variant="outline"
+            size="lg"
+            className="w-full h-14 rounded-2xl text-base font-semibold border-2"
+          >
+            <Layers className="w-5 h-5 mr-2" />
+            Analyze Multiple Items
+          </Button>
+        </div>
       </div>
     );
   }

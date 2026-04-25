@@ -2,38 +2,55 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ScanView } from "@/components/ScanView";
 import { ResultCard } from "@/components/ResultCard";
+import { MultiResultCard } from "@/components/MultiResultCard";
 import { Classification, getSortedCount, incrementSortedCount } from "@/lib/eco";
 import { Leaf } from "lucide-react";
 import { toast } from "sonner";
 
 const Index = () => {
   const [loading, setLoading] = useState(false);
+  const [loadingMode, setLoadingMode] = useState<"single" | "multi" | null>(null);
   const [result, setResult] = useState<Classification | null>(null);
+  const [multiResult, setMultiResult] = useState<Classification[] | null>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
   const [count, setCount] = useState(0);
 
   useEffect(() => setCount(getSortedCount()), []);
 
-  const handleAnalyze = async (image: string) => {
+  const handleAnalyze = async (image: string, mode: "single" | "multi") => {
     setLoading(true);
+    setLoadingMode(mode);
     setImageUrl(image);
     try {
-      const { data, error } = await supabase.functions.invoke("classify-waste", {
+      const fn = mode === "multi" ? "classify-waste-multi" : "classify-waste";
+      const { data, error } = await supabase.functions.invoke(fn, {
         body: { image },
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
-      setResult(data as Classification);
-      setCount(incrementSortedCount());
+
+      if (mode === "multi") {
+        const items = (data?.items ?? []) as Classification[];
+        if (!items.length) throw new Error("No items detected. Try a clearer photo.");
+        setMultiResult(items);
+        let n = count;
+        for (let i = 0; i < items.length; i++) n = incrementSortedCount();
+        setCount(n);
+      } else {
+        setResult(data as Classification);
+        setCount(incrementSortedCount());
+      }
     } catch (e: any) {
       toast.error(e?.message || "Could not analyze image. Try again.");
     } finally {
       setLoading(false);
+      setLoadingMode(null);
     }
   };
 
   const reset = () => {
     setResult(null);
+    setMultiResult(null);
     setImageUrl("");
   };
 
@@ -60,12 +77,9 @@ const Index = () => {
 
         <div className="flex-1 flex flex-col justify-center">
           {result ? (
-            <ResultCard
-              result={result}
-              imageUrl={imageUrl}
-              onReset={reset}
-              totalSorted={count}
-            />
+            <ResultCard result={result} imageUrl={imageUrl} onReset={reset} totalSorted={count} />
+          ) : multiResult ? (
+            <MultiResultCard items={multiResult} imageUrl={imageUrl} onReset={reset} totalSorted={count} />
           ) : (
             <div className="space-y-8">
               <div className="text-center space-y-3 animate-fade-up">
@@ -73,10 +87,10 @@ const Index = () => {
                   Sort it right<br />in seconds.
                 </h2>
                 <p className="text-muted-foreground text-sm max-w-xs mx-auto">
-                  Snap a photo of any item — we'll tell you exactly where it goes.
+                  Snap a photo of one item — or a whole pile — and we'll sort each one.
                 </p>
               </div>
-              <ScanView onAnalyze={handleAnalyze} loading={loading} />
+              <ScanView onAnalyze={handleAnalyze} loading={loading} loadingMode={loadingMode} />
             </div>
           )}
         </div>
