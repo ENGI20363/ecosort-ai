@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Classification, ItemImpact } from '../types';
 import { getCategoryMeta } from '../lib/categories';
+import { speak } from '../lib/speech';
 
 interface Props {
   result: Classification;
@@ -14,6 +15,10 @@ interface Props {
 
 export const ResultCard: React.FC<Props> = ({ result, imageUri, totalSorted, impact, onReset, onViewStats }) => {
   const meta = getCategoryMeta(result.category);
+
+  useEffect(() => {
+    speak(`${result.item} — ${result.category}. ${result.tip}`);
+  }, []);
 
   return (
     <View style={styles.container}>

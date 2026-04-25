@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Image, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { MultiClassification } from '../types';
 import { getCategoryMeta } from '../lib/categories';
 import { getItemImpact } from '../lib/impact';
+import { speak } from '../lib/speech';
 
 interface Props {
   items: MultiClassification[];
@@ -25,7 +26,14 @@ const fallbackBbox = (index: number, total: number) => {
   return { x: 0.05 + col * (0.9 / cols), y: 0.05 + row * (0.9 / Math.ceil(total / cols)), width: size, height: size * 1.2 };
 };
 
-export const MultiResultView: React.FC<Props> = ({ items, imageUri, totalSorted, onReset }) => (
+export const MultiResultView: React.FC<Props> = ({ items, imageUri, totalSorted, onReset }) => {
+  useEffect(() => {
+    const names = items.map(i => `${i.item}: ${i.category}`).join('. ');
+    const text = `${items.length} item${items.length === 1 ? '' : 's'} detected. ${names}.`;
+    speak(text);
+  }, []);
+
+  return (
   <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
     <View style={styles.imageWrapper}>
       <Image source={{ uri: imageUri }} style={styles.image} resizeMode="cover" />
@@ -98,7 +106,8 @@ export const MultiResultView: React.FC<Props> = ({ items, imageUri, totalSorted,
 
     <View style={{ height: 40 }} />
   </ScrollView>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#282A36' },
