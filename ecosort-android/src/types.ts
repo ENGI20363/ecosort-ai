@@ -29,3 +29,18 @@ export interface ImpactTotals {
   weightDiverted: number;
   scanCount: number;
 }
+
+export interface BoundingBox {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface MultiClassification {
+  item: string;
+  category: Category;
+  confidence: number;
+  tip: string;
+  bbox: BoundingBox;
+}
