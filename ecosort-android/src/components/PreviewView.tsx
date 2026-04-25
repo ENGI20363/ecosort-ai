@@ -14,7 +14,7 @@ export const PreviewView: React.FC<Props> = ({ imageUri, loading, onAnalyze, onD
       <Image source={{ uri: imageUri }} style={styles.image} resizeMode="cover" />
       {loading && (
         <View style={styles.overlay}>
-          <ActivityIndicator size="large" color="#16A34A" />
+          <ActivityIndicator size="large" color="#BD93F9" />
           <Text style={styles.analyzingText}>Analyzing...</Text>
         </View>
       )}
@@ -36,25 +36,25 @@ export const PreviewView: React.FC<Props> = ({ imageUri, loading, onAnalyze, onD
 );
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 24, justifyContent: 'center', backgroundColor: '#F0FDF4' },
+  container: { flex: 1, padding: 24, justifyContent: 'center', backgroundColor: '#282A36' },
   imageWrapper: { borderRadius: 24, overflow: 'hidden', aspectRatio: 4 / 3, marginBottom: 20 },
   image: { width: '100%', height: '100%' },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255,255,255,0.8)',
+    backgroundColor: 'rgba(40,42,54,0.85)',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 12,
   },
-  analyzingText: { fontSize: 14, fontWeight: '600', color: '#111827' },
+  analyzingText: { fontSize: 14, fontFamily: 'KumbhSans_600SemiBold', color: '#F8F8F2' },
   discardBtn: {
     position: 'absolute', top: 12, right: 12,
     width: 36, height: 36, borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.9)',
+    backgroundColor: 'rgba(40,42,54,0.8)',
     justifyContent: 'center', alignItems: 'center',
   },
-  discardBtnText: { fontSize: 16, color: '#374151' },
-  analyzeBtn: { backgroundColor: '#16A34A', borderRadius: 16, height: 56, justifyContent: 'center', alignItems: 'center' },
-  analyzeBtnDisabled: { backgroundColor: '#86EFAC' },
-  analyzeBtnText: { fontSize: 16, fontWeight: '700', color: '#fff' },
+  discardBtnText: { fontSize: 16, color: '#F8F8F2' },
+  analyzeBtn: { backgroundColor: '#BD93F9', borderRadius: 16, height: 56, justifyContent: 'center', alignItems: 'center' },
+  analyzeBtnDisabled: { backgroundColor: 'rgba(189,147,249,0.4)' },
+  analyzeBtnText: { fontSize: 16, fontFamily: 'KumbhSans_700Bold', color: '#282A36' },
 });

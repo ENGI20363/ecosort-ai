@@ -38,27 +38,27 @@ export const CaptureView: React.FC<Props> = ({ onImageSelected }) => {
       </View>
 
       <TouchableOpacity style={[styles.btn, styles.primaryBtn]} onPress={() => launch(true)}>
-        <Text style={styles.btnText}>📷  Open Camera</Text>
+        <Text style={styles.primaryBtnText}>📷  Open Camera</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={[styles.btn, styles.secondaryBtn]} onPress={() => launch(false)}>
-        <Text style={[styles.btnText, styles.secondaryBtnText]}>⬆️  Upload Image</Text>
+        <Text style={styles.secondaryBtnText}>⬆️  Upload Image</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 24, justifyContent: 'center', backgroundColor: '#F0FDF4' },
+  container: { flex: 1, padding: 24, justifyContent: 'center', backgroundColor: '#282A36' },
   header: { alignItems: 'center', marginBottom: 40 },
-  title: { fontSize: 24, fontWeight: '800', color: '#111827' },
-  subtitle: { fontSize: 12, color: '#6B7280', marginTop: 2 },
-  hero: { alignItems: 'center', marginBottom: 40 },
-  heroText: { fontSize: 36, fontWeight: '800', textAlign: 'center', color: '#111827', lineHeight: 44 },
-  heroSub: { fontSize: 14, color: '#6B7280', textAlign: 'center', marginTop: 12, maxWidth: 260 },
+  title: { fontSize: 24, fontFamily: 'KumbhSans_800ExtraBold', color: '#F8F8F2' },
+  subtitle: { fontSize: 12, fontFamily: 'KumbhSans_400Regular', color: '#6272A4', marginTop: 4 },
+  hero: { alignItems: 'center', marginBottom: 48 },
+  heroText: { fontSize: 36, fontFamily: 'KumbhSans_800ExtraBold', textAlign: 'center', color: '#F8F8F2', lineHeight: 44 },
+  heroSub: { fontSize: 14, fontFamily: 'KumbhSans_400Regular', color: '#6272A4', textAlign: 'center', marginTop: 12, maxWidth: 260, lineHeight: 22 },
   btn: { borderRadius: 16, height: 64, justifyContent: 'center', alignItems: 'center', marginBottom: 12 },
-  primaryBtn: { backgroundColor: '#16A34A' },
-  secondaryBtn: { backgroundColor: '#fff', borderWidth: 2, borderColor: '#D1D5DB' },
-  btnText: { fontSize: 18, fontWeight: '700', color: '#fff' },
-  secondaryBtnText: { color: '#374151' },
+  primaryBtn: { backgroundColor: '#BD93F9' },
+  secondaryBtn: { backgroundColor: '#44475A' },
+  primaryBtnText: { fontSize: 17, fontFamily: 'KumbhSans_700Bold', color: '#282A36' },
+  secondaryBtnText: { fontSize: 17, fontFamily: 'KumbhSans_600SemiBold', color: '#F8F8F2' },
 });
