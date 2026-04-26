@@ -44,7 +44,8 @@ export const GoalsScreen: React.FC<Props> = ({ onBack }) => {
   const currentTotal = chartData[chartData.length - 1] ?? 0;
   const progress = currentGoal > 0 ? Math.min(1, currentTotal / currentGoal) : 0;
 
-  const handleTabChange = (metric: Metric) => {
+  const handleTabChange = async (metric: Metric) => {
+    await handleSave();
     setActiveTab(metric);
     const t = TABS.find(t => t.key === metric)!;
     setInputValue(String(goals[t.goalKey]));

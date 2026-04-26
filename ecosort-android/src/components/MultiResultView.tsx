@@ -10,6 +10,7 @@ interface Props {
   imageUri: string;
   totalSorted: number;
   onReset: () => void;
+  onViewStats: () => void;
 }
 
 const OVERLAY_OPACITY: Record<string, string> = {
@@ -26,7 +27,7 @@ const fallbackBbox = (index: number, total: number) => {
   return { x: 0.05 + col * (0.9 / cols), y: 0.05 + row * (0.9 / Math.ceil(total / cols)), width: size, height: size * 1.2 };
 };
 
-export const MultiResultView: React.FC<Props> = ({ items, imageUri, totalSorted, onReset }) => {
+export const MultiResultView: React.FC<Props> = ({ items, imageUri, totalSorted, onReset, onViewStats }) => {
   const handleSpeak = () => {
     const names = items.map(i => `${i.item}: ${i.category}`).join('. ');
     speak(`${items.length} item${items.length === 1 ? '' : 's'} detected. ${names}.`);
@@ -104,6 +105,10 @@ export const MultiResultView: React.FC<Props> = ({ items, imageUri, totalSorted,
       );
     })}
 
+    <TouchableOpacity style={styles.statsBtn} onPress={onViewStats}>
+      <Text style={styles.statsBtnText}>📊 View Your Impact</Text>
+    </TouchableOpacity>
+
     <TouchableOpacity style={styles.resetBtn} onPress={onReset}>
       <Text style={styles.resetBtnText}>↺  Scan Another</Text>
     </TouchableOpacity>
@@ -159,6 +164,8 @@ const styles = StyleSheet.create({
   chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 8 },
   chip: { backgroundColor: 'rgba(189,147,249,0.15)', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 10 },
   chipText: { fontSize: 11, fontFamily: 'KumbhSans_600SemiBold', color: '#BD93F9' },
+  statsBtn: { backgroundColor: '#383A47', borderWidth: 1, borderColor: '#BD93F9', borderRadius: 14, height: 48, justifyContent: 'center', alignItems: 'center', marginHorizontal: 16, marginTop: 8 },
+  statsBtnText: { fontFamily: 'KumbhSans_700Bold', fontSize: 15, color: '#BD93F9' },
   resetBtn: {
     backgroundColor: '#BD93F9', borderRadius: 14, height: 52,
     justifyContent: 'center', alignItems: 'center',

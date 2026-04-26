@@ -169,6 +169,7 @@ export default function App() {
           imageUri={imageUri}
           totalSorted={sortedCount}
           onReset={handleReset}
+          onViewStats={() => setPhase('stats')}
         />
       )}
       {phase === 'stats' && (
