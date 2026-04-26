@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Alert, StyleSheet, View } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
 import { useFonts, KumbhSans_400Regular, KumbhSans_600SemiBold, KumbhSans_700Bold, KumbhSans_800ExtraBold } from '@expo-google-fonts/kumbh-sans';
 import { CaptureView } from './src/components/CaptureView';
 import { PreviewView } from './src/components/PreviewView';
@@ -37,6 +40,10 @@ export default function App() {
   useEffect(() => {
     getSortedCount().then(setSortedCount);
   }, []);
+
+  useEffect(() => {
+    if (fontsLoaded) SplashScreen.hideAsync();
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) return <View style={styles.loading} />;
 
