@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Classification, ItemImpact } from '../types';
 import { getCategoryMeta } from '../lib/categories';
@@ -16,10 +16,6 @@ interface Props {
 export const ResultCard: React.FC<Props> = ({ result, imageUri, totalSorted, impact, onReset, onViewStats }) => {
   const meta = getCategoryMeta(result.category);
 
-  useEffect(() => {
-    speak(`${result.item} — ${result.category}. ${result.tip}`);
-  }, []);
-
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -35,7 +31,12 @@ export const ResultCard: React.FC<Props> = ({ result, imageUri, totalSorted, imp
 
         <View style={styles.body}>
           <Text style={styles.detectedLabel}>Detected</Text>
-          <Text style={styles.itemName}>{result.item}</Text>
+          <View style={styles.itemNameRow}>
+            <Text style={styles.itemName}>{result.item}</Text>
+            <TouchableOpacity style={styles.speakBtn} onPress={() => speak(`${result.item} — ${result.category}. ${result.tip}`)}>
+              <Text style={styles.speakBtnText}>🔊</Text>
+            </TouchableOpacity>
+          </View>
 
           <View style={[styles.tipBox, { backgroundColor: meta.softColor }]}>
             <Text style={styles.tipLabel}>Disposal Tip</Text>
@@ -91,7 +92,10 @@ const styles = StyleSheet.create({
   confidenceText: { fontFamily: 'KumbhSans_700Bold', fontSize: 12, color: '#F8F8F2' },
   body: { padding: 20, gap: 12 },
   detectedLabel: { fontSize: 11, fontFamily: 'KumbhSans_600SemiBold', textTransform: 'uppercase', letterSpacing: 1.2, color: '#6272A4' },
-  itemName: { fontSize: 24, fontFamily: 'KumbhSans_800ExtraBold', color: '#F8F8F2', textTransform: 'capitalize' },
+  itemNameRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  itemName: { fontSize: 24, fontFamily: 'KumbhSans_800ExtraBold', color: '#F8F8F2', textTransform: 'capitalize', flex: 1 },
+  speakBtn: { backgroundColor: '#383A47', borderRadius: 10, width: 36, height: 36, justifyContent: 'center', alignItems: 'center' },
+  speakBtnText: { fontSize: 16 },
   tipBox: { borderRadius: 14, padding: 14 },
   tipLabel: { fontSize: 10, fontFamily: 'KumbhSans_600SemiBold', textTransform: 'uppercase', letterSpacing: 1, color: '#6272A4', marginBottom: 6 },
   tipText: { fontSize: 14, fontFamily: 'KumbhSans_400Regular', lineHeight: 20 },

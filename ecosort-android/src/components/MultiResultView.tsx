@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, Image, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { MultiClassification } from '../types';
 import { getCategoryMeta } from '../lib/categories';
@@ -27,11 +27,10 @@ const fallbackBbox = (index: number, total: number) => {
 };
 
 export const MultiResultView: React.FC<Props> = ({ items, imageUri, totalSorted, onReset }) => {
-  useEffect(() => {
+  const handleSpeak = () => {
     const names = items.map(i => `${i.item}: ${i.category}`).join('. ');
-    const text = `${items.length} item${items.length === 1 ? '' : 's'} detected. ${names}.`;
-    speak(text);
-  }, []);
+    speak(`${items.length} item${items.length === 1 ? '' : 's'} detected. ${names}.`);
+  };
 
   return (
   <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -67,7 +66,12 @@ export const MultiResultView: React.FC<Props> = ({ items, imageUri, totalSorted,
     </View>
 
     <View style={styles.header}>
-      <Text style={styles.headerTitle}>{items.length} items detected</Text>
+      <View style={styles.headerTop}>
+        <Text style={styles.headerTitle}>{items.length} items detected</Text>
+        <TouchableOpacity style={styles.speakBtn} onPress={handleSpeak}>
+          <Text style={styles.speakBtnText}>🔊</Text>
+        </TouchableOpacity>
+      </View>
       <Text style={styles.headerSub}>🌍 {totalSorted} sorted correctly</Text>
     </View>
 
@@ -134,8 +138,11 @@ const styles = StyleSheet.create({
     color: '#282A36',
   },
   header: { padding: 20, paddingBottom: 8 },
+  headerTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   headerTitle: { fontSize: 20, fontFamily: 'KumbhSans_800ExtraBold', color: '#F8F8F2' },
   headerSub: { fontSize: 12, fontFamily: 'KumbhSans_400Regular', color: '#6272A4', marginTop: 4 },
+  speakBtn: { backgroundColor: '#383A47', borderRadius: 10, width: 36, height: 36, justifyContent: 'center', alignItems: 'center' },
+  speakBtnText: { fontSize: 16 },
   row: {
     flexDirection: 'row',
     backgroundColor: '#44475A',
