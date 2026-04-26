@@ -68,7 +68,7 @@ export const GoalsScreen: React.FC<Props> = ({ onBack }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={onBack} style={styles.backBtn}>
+        <TouchableOpacity onPress={() => { handleSave(); onBack(); }} style={styles.backBtn}>
           <Text style={styles.backBtnText}>← Back</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Monthly Goals</Text>
@@ -151,7 +151,7 @@ export const GoalsScreen: React.FC<Props> = ({ onBack }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#282A36', paddingTop: 16 },
+  container: { flex: 1, backgroundColor: '#282A36', paddingTop: 48 },
   header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 24, paddingBottom: 16 },
   backBtn: { marginRight: 16 },
   backBtnText: { fontSize: 16, fontFamily: 'KumbhSans_600SemiBold', color: '#BD93F9' },
