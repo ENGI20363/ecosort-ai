@@ -1,5 +1,6 @@
 import * as FileSystem from 'expo-file-system';
 import { Audio } from 'expo-av';
+import { Alert } from 'react-native';
 
 const SUPABASE_URL = 'https://txdpuiukpicwxbzgpbdu.supabase.co';
 const SUPABASE_ANON_KEY =
@@ -17,25 +18,35 @@ export const speak = async (text: string): Promise<void> => {
       body: JSON.stringify({ text }),
     });
 
-    if (!response.ok) return;
-    const { audio } = await response.json();
-    if (!audio) return;
+    if (!response.ok) {
+      Alert.alert('TTS Debug', `HTTP error: ${response.status}`);
+      return;
+    }
+
+    const json = await response.json();
+    if (!json.audio) {
+      Alert.alert('TTS Debug', `No audio in response. Keys: ${Object.keys(json).join(', ')}`);
+      return;
+    }
+
+    Alert.alert('TTS Debug', `Got audio (${json.audio.length} chars). Writing file...`);
 
     const path = (FileSystem.cacheDirectory ?? '') + 'ecosort_speech.mp3';
-    await FileSystem.writeAsStringAsync(path, audio, {
+    await FileSystem.writeAsStringAsync(path, json.audio, {
       encoding: FileSystem.EncodingType.Base64,
     });
 
     await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
     const { sound } = await Audio.Sound.createAsync({ uri: path });
     await sound.playAsync();
+    Alert.alert('TTS Debug', 'playAsync called');
 
     sound.setOnPlaybackStatusUpdate((status) => {
       if (status.isLoaded && status.didJustFinish) {
         sound.unloadAsync();
       }
     });
-  } catch {
-    // Silent fail — TTS is an enhancement, not core functionality
+  } catch (e: any) {
+    Alert.alert('TTS Debug', `Error: ${e?.message ?? String(e)}`);
   }
 };
