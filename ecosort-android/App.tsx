@@ -42,7 +42,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (fontsLoaded) SplashScreen.hideAsync();
+    if (fontsLoaded) setTimeout(() => SplashScreen.hideAsync(), 1800);
   }, [fontsLoaded]);
 
   if (!fontsLoaded) return <View style={styles.loading} />;
